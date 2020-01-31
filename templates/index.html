@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>PKIX - Management</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <script>
+        function addressChangePrompt(member_id, address) {
+            let new_address = prompt("Edit Address", address);
+
+            if ((new_address != null) && (new_address !== address)) {
+              window.location = "/member/ip?id=" + member_id + "&ip=" + encodeURI(new_address);
+            }
+        }
+
+        function addRoutePrompt() {
+            let new_route = prompt("Add Route");
+
+            if (new_route != null) {
+              window.location = "network/route?route=" + new_route;
+            }
+        }
+    </script>
+
+</head>
+<body>
+<div class="container-scroller">
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+             style="background-color: black; padding: 10px;">
+            <img src="https://packetframe.com/img/text.png" alt="PacketFrame Logo">
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown language-dropdown">
+                    <span class="profile-text font-weight-medium d-none d-md-block">{{ network_id }}</span>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li><a href="/logout">Logged in as <b>{{ username }}</b></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid page-body-wrapper">
+        <div class="content-wrapper col-12">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="d-flex">
+                                        <div class="wrapper">
+                                            <h3 class="mb-0 font-weight-semibold">{{ total_members }}</h3>
+                                            <h5 class="mb-0 font-weight-medium text-primary">Members</h5>
+                                            <p class="mb-0 text-muted">Total Exchange Members</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mt-md-0 mt-4">
+                                    <div class="d-flex">
+                                        <div class="wrapper">
+                                            <h3 class="mb-0 font-weight-semibold">{{ routes_length }}</h3>
+                                            <h5 class="mb-0 font-weight-medium text-primary">Routes</h5>
+                                            <p class="mb-0 text-muted">Total Exchange LAN Prefixes</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mt-md-0 mt-4">
+                                    <div class="d-flex">
+                                        <div class="wrapper">
+                                            <h3 class="mb-0 font-weight-semibold">{{ controller_version }}</h3>
+                                            <h5 class="mb-0 font-weight-medium text-primary">Controller Version</h5>
+                                            <p class="mb-0 text-muted">Controller ZeroTier Version</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mt-md-0 mt-4">
+                                    <div class="d-flex">
+                                        <div class="wrapper">
+                                            <h3 class="mb-0 font-weight-semibold">{{ controller_clock }}</h3>
+                                            <h5 class="mb-0 font-weight-medium text-primary">Controller Clock</h5>
+                                            <p class="mb-0 text-muted">ZT Epoch Time</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title mb-2">Members</h3>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>ASN</th>
+                                        <th>Name</th>
+                                        <th>AS-SET</th>
+                                        <th>ZT Address</th>
+                                        <th>IPv6</th>
+                                        <th>Version</th>
+                                        <th>Authorization</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {{ member_html }}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                  <h3 class="card-title mb-2">
+                                    Routes
+
+                                    <span style="float: right">
+                                      <a onclick="addRoutePrompt()">➕</a>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <a href="/network/zero">🗑</a>
+                                    </span>
+                                  </h3>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>CIDR</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {{ routes }}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="container-fluid">
+        <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright &copy; PacketFrame 2020</span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">PKIX - Version 0.2</span>
+    </div>
+</footer>
+</body>
+
+</html>
